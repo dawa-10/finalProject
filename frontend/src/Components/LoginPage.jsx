@@ -1,6 +1,7 @@
-// Login.js
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom"; 
+import "../Styles/Login.css"
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({
@@ -8,6 +9,7 @@ export default function LoginPage() {
     password: "",
   });
   const [postResponse, setPostResponse] = useState("");
+  const navigate = useNavigate(); // Initialize navigate for redirection
 
   const handleOnChange = (e) => {
     setFormData((prevData) => {
@@ -24,6 +26,9 @@ export default function LoginPage() {
         if (response.data.token) {
           // Save the token (in localStorage or any state management)
           localStorage.setItem("token", response.data.token);
+
+          // Redirect to the Recent Tournaments page
+          navigate("/recent-tournaments");
         }
       })
       .catch((error) => {

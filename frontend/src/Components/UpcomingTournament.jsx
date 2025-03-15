@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
-import "../Styles/Recent.css";
 
-const RecentTournamentPage = () => {
+
+const UpcomingTournamentPage = () => {
   const [tournaments, setTournaments] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true); // Add a loading state
@@ -16,7 +16,7 @@ const RecentTournamentPage = () => {
       navigate("/login");
     } else {
       axios
-        .get("http://localhost:3000/api/recent-tournaments", {
+        .get("http://localhost:3000/api/upcoming-tournaments", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -38,10 +38,9 @@ const RecentTournamentPage = () => {
   }, [navigate]);
 
   return (
-    
-    <div className="recent-tournaments-container">
-      <Navbar/>
-      <h1>Recent Tournaments</h1>
+    <div className="upcoming-tournaments-container">
+        <Navbar/>
+      <h1>Upcoming Tournaments</h1>
       {error && <p className="error-message">{error}</p>}
       {loading ? (
         <p>Loading...</p> // Show loading text while fetching data
@@ -51,26 +50,20 @@ const RecentTournamentPage = () => {
             <thead>
               <tr>
                 <th>Tournament Name</th>
-                <th>Winner</th>
-                <th>Date</th>
-                <th>Prize Pool</th>
                 <th>Link</th>
               </tr>
             </thead>
             <tbody>
               {tournaments.length === 0 ? (
                 <tr>
-                  <td colSpan="5" className="error-message">
-                    No tournaments available
+                  <td colSpan="2" className="error-message">
+                    No upcoming tournaments available
                   </td>
                 </tr>
               ) : (
                 tournaments.map((tournament, index) => (
                   <tr key={index}>
                     <td>{tournament.tournamentName}</td>
-                    <td>{tournament.winner}</td>
-                    <td>{tournament.date}</td>
-                    <td>{tournament.prizePool}</td>
                     <td>
                       <a
                         href={tournament.tournamentLink}
@@ -86,12 +79,9 @@ const RecentTournamentPage = () => {
             </tbody>
           </table>
         </div>
-        
       )}
-      <p><a href="/upcoming-tournaments">hi</a></p>
     </div>
-    
   );
 };
 
-export default RecentTournamentPage;
+export default UpcomingTournamentPage;

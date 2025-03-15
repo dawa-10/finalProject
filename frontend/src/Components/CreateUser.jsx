@@ -20,7 +20,7 @@ export default function CreateUser() {
     await axios
       .post("http://localhost:3000/create-user", formData)
       .then((response) => {
-        setPostResponse(response.data); // Set the response message
+        setPostResponse("User Created"); // Set the response message
       })
       .catch((error) => {
         setPostResponse("Error creating user.");
@@ -53,9 +53,12 @@ export default function CreateUser() {
         </div>
         <div>
           <button type="submit">Create User</button>
+          {postResponse && <p style={{ color: postResponse.includes("Error") ? "red" : "green" }}>{postResponse}</p>}
+          Click <a href="/login">here</a> to go to login page
         </div>
       </form>
-      {postResponse && <p>{postResponse}</p>}
+      
+
     </div>
   );
 }

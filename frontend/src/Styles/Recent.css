@@ -1,0 +1,54 @@
+/* Container styles */
+.recent-tournaments-container {
+  width: 100vw;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow-x: auto; /* Enable horizontal scrolling for the container */
+  max-width: 100%;  /* Ensure the container doesn't overflow the screen */
+}
+
+/* Table styling */
+.tournaments-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto; /* Allow dynamic column width based on content */
+}
+
+/* Table header */
+.tournaments-table th,
+.tournaments-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border: 1px solid #ddd;
+  white-space: nowrap; /* Prevent text from wrapping and ensure it stays in one line */
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+/* Sticky header */
+.tournaments-table th {
+  background-color: #f4f4f4;
+  position: sticky;
+  top: 0;
+  z-index: 2; /* Ensures header is above body content */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional shadow for header */
+}
+
+/* Table body wrapper for scroll */
+.tournaments-table-wrapper {
+  max-height: 60vh; /* Adjust this based on the desired height */
+  overflow-y: auto;  /* Enable vertical scrolling */
+  display: block;    /* Ensures the body is scrollable */
+  overflow-x: auto;  /* Allow horizontal scrolling if content overflows */
+}
+
+/* Optional: Style the links in the table */
+.tournaments-table a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.tournaments-table a:hover {
+  text-decoration: underline;
+}
+
