@@ -1,39 +1,31 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; 
-import "../Styles/Login.css"
+import { useNavigate } from "react-router-dom";
+import "../Styles/Login.css";
 
 export default function LoginPage() {
-  const [formData, setFormData] = useState({
-    username: "",
-    password: "",
-  });
+  const [formData, setFormData] = useState({ username: "", password: "" });
   const [postResponse, setPostResponse] = useState("");
-  const navigate = useNavigate(); // Initialize navigate for redirection
+  const navigate = useNavigate();
 
   const handleOnChange = (e) => {
-    setFormData((prevData) => {
-      return { ...prevData, [e.target.name]: e.target.value };
-    });
+    setFormData((prevData) => ({ ...prevData, [e.target.name]: e.target.value }));
   };
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
-    await axios
-      .post("http://localhost:3000/login", formData)
-      .then((response) => {
-        setPostResponse(response.data.message); // Show login response message
-        if (response.data.token) {
-          // Save the token (in localStorage or any state management)
-          localStorage.setItem("token", response.data.token);
+    try {
+      const response = await axios.post("http://localhost:3000/api/auth/login", formData);
+      setPostResponse(response.data.message);
 
-          // Redirect to the Recent Tournaments page
-          navigate("/recent-tournaments");
-        }
-      })
-      .catch((error) => {
-        setPostResponse("Error logging in.");
-      });
+      if (response.data.token) {
+        localStorage.setItem("token", response.data.token); // Store the token in localStorage
+        localStorage.setItem("username", formData.username); // Store username in localStorage
+        navigate("/homepage"); // Redirect to protected page after successful login
+      }
+    } catch (error) {
+      setPostResponse("Error logging in.");
+    }
   };
 
   return (

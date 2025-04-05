@@ -1,4 +1,3 @@
-// CreateUser.js
 import React, { useState } from "react";
 import axios from "axios";
 
@@ -18,7 +17,7 @@ export default function CreateUser() {
   const handleCreateUserSubmit = async (e) => {
     e.preventDefault();
     await axios
-      .post("http://localhost:3000/create-user", formData)
+      .post("http://localhost:3000/api/auth/create-user", formData)
       .then((response) => {
         setPostResponse("User Created"); // Set the response message
       })
@@ -54,7 +53,7 @@ export default function CreateUser() {
         <div>
           <button type="submit">Create User</button>
           {postResponse && <p style={{ color: postResponse.includes("Error") ? "red" : "green" }}>{postResponse}</p>}
-          Click <a href="/login">here</a> to go to login page
+          Click <a href="/">here</a> to go to login page
         </div>
       </form>
       

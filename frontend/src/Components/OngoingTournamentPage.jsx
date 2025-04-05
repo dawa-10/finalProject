@@ -1,12 +1,12 @@
-// Example from RecentTournamentPage.jsx
+// /frontend/src/components/OngoingTournamentPage.js
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
 import NotificationBell from "./NotificationBell";
-import "../Styles/Recent.css";
+import "../Styles/Ongoing.css";
 
-const RecentTournamentPage = () => {
+const OngoingTournamentPage = () => {
   const [tournaments, setTournaments] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -15,12 +15,10 @@ const RecentTournamentPage = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
-      alert("you are not logged in")
       navigate("/login");
-      return
     } else {
       axios
-        .get("http://localhost:3000/api/tournaments/recent", {
+        .get("http://localhost:3000/api/tournaments/ongoing", {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((response) => {
@@ -35,17 +33,10 @@ const RecentTournamentPage = () => {
   }, [navigate]);
 
   const handleFollow = (tournamentId) => {
-    const token = localStorage.getItem("token");
+    const username = localStorage.getItem("username");
     axios
-      .post(
-        "http://localhost:3000/api/tournaments/follow",
-        { tournamentId },
-        { headers: { Authorization: `Bearer ${token}` } }
-      )
-      .then((response) => {
-        alert(response.data.message);
-        // Optionally refresh the user profile or update UI here
-      })
+      .post("http://localhost:3000/api/tournament/ongoing", { username, tournamentId })
+      .then(() => alert("Tournament followed!"))
       .catch(() => alert("Error following tournament"));
   };
 
@@ -53,8 +44,8 @@ const RecentTournamentPage = () => {
     <div>
       <Navbar />
       <NotificationBell />
-      <div className="recent-tournaments-container">
-        <h1>Recent Tournaments</h1>
+      <div className="ongoing-tournaments-container">
+        <h1>Ongoing Tournaments</h1>
         {error && <p className="error-message">{error}</p>}
         {loading ? (
           <p>Loading...</p>
@@ -64,46 +55,29 @@ const RecentTournamentPage = () => {
               <thead>
                 <tr>
                   <th>Tournament Name</th>
-                  <th>Winner</th>
-                  <th>Date</th>
-                  <th>Prize Pool</th>
                   <th>Link</th>
                   <th>Follow</th>
                 </tr>
               </thead>
               <tbody>
-  {tournaments.length === 0 ? (
-    <tr>
-      <td colSpan="6" className="error-message">
-        No tournaments available
-      </td>
-    </tr>
-  ) : (
-    tournaments.map((tournament, index) => (
-      <tr key={tournament._id || index}>
-        <td>{tournament.tournamentName}</td>
-        <td>{tournament.winner}</td>
-        <td>{tournament.date}</td>
-        <td>{tournament.prizePool}</td>
-        <td>
-          <a
-            href={tournament.tournamentLink}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            View
-          </a>
-        </td>
-        <td>
-          <button onClick={() => handleFollow(tournament._id)}>
-            Follow
-          </button>
-        </td>
-      </tr>
-    ))
-  )}
-</tbody>
-
+                {tournaments.length === 0 ? (
+                  <tr>
+                    <td colSpan="3" className="error-message">No ongoing tournaments available</td>
+                  </tr>
+                ) : (
+                  tournaments.map((tournament) => (
+                    <tr key={tournament._id}>
+                      <td>{tournament.tournamentName}</td>
+                      <td>
+                        <a href={tournament.tournamentLink} target="_blank" rel="noopener noreferrer">View</a>
+                      </td>
+                      <td>
+                        <button onClick={() => handleFollow(tournament._id)}>Follow</button>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
             </table>
           </div>
         )}
@@ -112,4 +86,4 @@ const RecentTournamentPage = () => {
   );
 };
 
-export default RecentTournamentPage;
+export default OngoingTournamentPage;
