@@ -1,0 +1,39 @@
+/* UpcomingTournamentDetail.css */
+
+.tournament-detail-page {
+    background-color: #f4f7f6;
+    height: 90vh;
+    padding-bottom: 40px;
+  }
+  
+  .tournament-detail-container {
+    background: #fff;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .tournament-detail-container h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .tournament-detail-container p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    color: #555;
+  }
+  
+  .tournament-detail-container a {
+    color: #0077cc;
+    text-decoration: none;
+  }
+  
+  .tournament-detail-container a:hover {
+    text-decoration: underline;
+  }
+  

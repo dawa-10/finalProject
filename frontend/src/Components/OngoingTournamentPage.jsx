@@ -1,9 +1,11 @@
-// /frontend/src/components/OngoingTournamentPage.js
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
 import NotificationBell from "./NotificationBell";
+import { Link } from 'react-router-dom';
+
+
 import "../Styles/Ongoing.css";
 
 const OngoingTournamentPage = () => {
@@ -33,11 +35,21 @@ const OngoingTournamentPage = () => {
   }, [navigate]);
 
   const handleFollow = (tournamentId) => {
-    const username = localStorage.getItem("username");
+    const token = localStorage.getItem("token");
+  
     axios
-      .post("http://localhost:3000/api/tournament/ongoing", { username, tournamentId })
+      .post(
+        "http://localhost:3000/api/tournaments/follow",
+        { tournamentId },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
       .then(() => alert("Tournament followed!"))
-      .catch(() => alert("Error following tournament"));
+      .catch((err) => {
+        console.error(err);
+        alert("Error following tournament");
+      });
   };
 
   return (
@@ -68,9 +80,12 @@ const OngoingTournamentPage = () => {
                   tournaments.map((tournament) => (
                     <tr key={tournament._id}>
                       <td>{tournament.tournamentName}</td>
-                      <td>
-                        <a href={tournament.tournamentLink} target="_blank" rel="noopener noreferrer">View</a>
-                      </td>
+                    
+<td>
+  <Link to={`/ongoing/${encodeURIComponent(tournament.tournamentName)}`}>
+    View
+  </Link>
+</td>
                       <td>
                         <button onClick={() => handleFollow(tournament._id)}>Follow</button>
                       </td>

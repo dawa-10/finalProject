@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const tournamentSchema = new mongoose.Schema({
-  tournamentName: String, // 
+  tournamentName: String, 
   winner: String,
   date: String,
   prizePool: String,

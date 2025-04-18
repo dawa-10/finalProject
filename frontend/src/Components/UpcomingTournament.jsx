@@ -1,4 +1,4 @@
-// /frontend/src/components/UpcomingTournamentPage.js
+
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -33,12 +33,23 @@ const UpcomingTournamentPage = () => {
   }, [navigate]);
 
   const handleFollow = (tournamentId) => {
-    const username = localStorage.getItem("username");
+    const token = localStorage.getItem("token");
+  
     axios
-      .post("http://localhost:3000/api/follow-tournament", { username, tournamentId })
+      .post(
+        "http://localhost:3000/api/tournaments/follow",
+        { tournamentId },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
       .then(() => alert("Tournament followed!"))
-      .catch(() => alert("Error following tournament"));
+      .catch((err) => {
+        console.error(err);
+        alert("Error following tournament");
+      });
   };
+  
 
   return (
     <div className="upcoming-tournaments-container">
@@ -68,7 +79,9 @@ const UpcomingTournamentPage = () => {
                   <tr key={tournament._id}>
                     <td>{tournament.tournamentName}</td>
                     <td>
-                      <a href={tournament.tournamentLink} target="_blank" rel="noopener noreferrer">View</a>
+                    <button onClick={() => navigate(`/upcoming/${tournament.tournamentName}`)}>View</button>
+
+
                     </td>
                     <td>
                       <button onClick={() => handleFollow(tournament._id)}>Follow</button>

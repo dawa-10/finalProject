@@ -10,6 +10,8 @@ const tournamentRoutes = require("./Routes/tournamentRoutes");
 const userRoutes = require("./Routes/userRoutes");
 const { errorHandler } = require("./Middlewares/errorHandler");
 
+const { getRecentTournaments, getOngoingTournaments, getUpcomingTournaments } = require("./Controllers/tournamentController");
+
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -54,23 +56,44 @@ connectDB()
     server.listen(port, () => {
       console.log(`Server is running on port ${port}`);
     });
+
+    // 🔁 Start auto-scraping every 2 minutes
+    const callScrapers = async () => {
+      const fakeReq = { app }; // Needed for app.get("io")
+      const fakeRes = {
+        status: () => ({
+          json: () => {},
+        }),
+      };
+      const next = (e) => console.error("Scraper error:", e);
+
+      try {
+        console.log("⏳ Running scheduled scrapers...");
+        await getRecentTournaments(fakeReq, fakeRes, next);
+        await getOngoingTournaments(fakeReq, fakeRes, next);
+        await getUpcomingTournaments(fakeReq, fakeRes, next);
+        console.log("✅ Scraping done.");
+      } catch (err) {
+        console.error("❌ Scheduled scraping failed:", err);
+      }
+    };
+
+    // Start immediately + every 2 mins
+    callScrapers();
+    setInterval(callScrapers, 2 * 60 * 1000);
   })
   .catch((error) => {
     console.error("DB connection failed", error);
   });
 
-
-  const Tournament = require('./Models/tournament');
+const Tournament = require('./Models/tournament');
 
 // Setup change stream on Tournament collection
 const changeStream = Tournament.watch();
-
 changeStream.on('change', (change) => {
   if (change.operationType === 'insert') {
     const newTournament = change.fullDocument;
     console.log('New Tournament Added:', newTournament);
-
-    // Notify connected clients via Socket.IO
     io.emit('newTournament', newTournament);
   }
 });

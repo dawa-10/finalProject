@@ -1,4 +1,4 @@
-// /frontend/src/components/NotificationBell.js
+
 import React, { useEffect, useState } from "react";
 import io from "socket.io-client";
 import "../Styles/NotificationBell.css";
@@ -10,7 +10,6 @@ const NotificationBell = () => {
 
   useEffect(() => {
     socket.on("tournamentUpdate", (data) => {
-      // You can compare data with a stored state if needed, or simply notify:
       alert(`New ${data.type} tournaments are available!`);
       setNotifications((prev) => [{ message: `New ${data.type} tournaments available!` }, ...prev]);
     });

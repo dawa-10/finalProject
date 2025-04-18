@@ -1,10 +1,11 @@
-// Example from RecentTournamentPage.jsx
+
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
 import NotificationBell from "./NotificationBell";
 import "../Styles/Recent.css";
+import { Link } from "react-router-dom";
 
 const RecentTournamentPage = () => {
   const [tournaments, setTournaments] = useState([]);
@@ -37,18 +38,16 @@ const RecentTournamentPage = () => {
   const handleFollow = (tournamentId) => {
     const token = localStorage.getItem("token");
     axios
-      .post(
-        "http://localhost:3000/api/tournaments/follow",
-        { tournamentId },
-        { headers: { Authorization: `Bearer ${token}` } }
-      )
+      .post("http://localhost:3000/api/tournaments/follow", { tournamentId }, { headers: { Authorization: `Bearer ${token}` } })
       .then((response) => {
         alert(response.data.message);
-        // Optionally refresh the user profile or update UI here
       })
-      .catch(() => alert("Error following tournament"));
+      .catch((error) => {
+        alert("Error following tournament: " + error.response.data.message);
+      });
   };
-
+  
+  
   return (
     <div>
       <Navbar />
@@ -67,7 +66,7 @@ const RecentTournamentPage = () => {
                   <th>Winner</th>
                   <th>Date</th>
                   <th>Prize Pool</th>
-                  <th>Link</th>
+                  <th>Standings</th>
                   <th>Follow</th>
                 </tr>
               </thead>
@@ -86,13 +85,9 @@ const RecentTournamentPage = () => {
         <td>{tournament.date}</td>
         <td>{tournament.prizePool}</td>
         <td>
-          <a
-            href={tournament.tournamentLink}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            View
-          </a>
+        <Link to={`/standings/${encodeURIComponent(tournament.tournamentName)}`}>
+  View Standings
+</Link>
         </td>
         <td>
           <button onClick={() => handleFollow(tournament._id)}>

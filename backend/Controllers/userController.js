@@ -3,7 +3,7 @@ const Notification = require("../Models/notification");
 
 exports.getProfile = async (req, res, next) => {
   try {
-    // Using req.userId provided by verifyToken middleware
+   
     const user = await User.findById(req.userId).populate("followedTournaments");
     if (!user) return res.status(404).json({ message: "User not found" });
     res.json(user);
