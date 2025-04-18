@@ -88,12 +88,10 @@ const handleDelete = async (tournamentId) => {
               <div className="tournament-card" key={tournament._id}>
                 <h3 className="tournament-name">{tournament.tournamentName}</h3>
                 <p className="tournament-date">{tournament.date}</p>
-                <button
-                  className="delete-button"
-                  onClick={() => handleDelete(tournament._id)}
-                >
-                  Remove
-                </button>
+                <button data-testid={`remove-btn-${tournament._id}`} onClick={() => handleDelete(tournament._id)}>
+  Remove
+</button>
+
               </div>
             ))
           ) : (

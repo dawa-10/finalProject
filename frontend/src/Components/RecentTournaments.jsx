@@ -90,9 +90,10 @@ const RecentTournamentPage = () => {
 </Link>
         </td>
         <td>
-          <button onClick={() => handleFollow(tournament._id)}>
-            Follow
-          </button>
+        <button data-testid={`follow-btn-${tournament._id}`} onClick={() => handleFollow(tournament._id)}>
+  Follow
+</button>
+
         </td>
       </tr>
     ))

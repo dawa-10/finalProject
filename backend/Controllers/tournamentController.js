@@ -15,6 +15,7 @@ exports.getRecentTournaments = async (req, res, next) => {
 
     await page.goto("https://liquipedia.net/pubgmobile/Recent_Tournament_Results", {
       waitUntil: "domcontentloaded",
+      timeout: 300000
     });
 
     await page.waitForSelector(".gridTable");
